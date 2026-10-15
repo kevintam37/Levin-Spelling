@@ -74,7 +74,30 @@ input.type{width:100%;font-family:var(--display);font-size:1.7rem;font-weight:60
 .score{font-family:var(--display);font-size:3rem;font-weight:700;color:var(--accent)}
 .miss{color:var(--bad);font-weight:800}
 .hit{color:var(--good);font-weight:800}
-@media (prefers-reduced-motion:reduce){.shake{animation:none}.bar>div{transition:none}}
+.boss{display:flex;align-items:center;gap:14px;background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:10px 14px}
+.boss svg{width:84px;height:auto;flex:none}
+.hp{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.hpbar{height:14px;border-radius:99px;background:var(--line);overflow:hidden}
+.hpbar>div{height:100%;background:var(--bad);transition:width .4s}
+.hearts{color:var(--bad);font-size:1.4rem;letter-spacing:3px;line-height:1}
+.hearts i{font-style:normal;color:var(--line)}
+.mon{animation:bob 2.4s ease-in-out infinite}
+.hurt .mon{animation:shake .4s}
+@keyframes bob{50%{transform:translateY(-4px)}}
+.bigmon svg{width:150px;height:auto}
+.chip{font-weight:800;font-size:.85rem;color:var(--accent);white-space:nowrap;min-width:0}
+.mode.alt{background:var(--surface);color:var(--ink);border:2px solid var(--accent)}
+.stickers{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.sticker{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:14px;border-radius:16px;background:var(--surface);border:2px solid var(--line);min-width:0}
+.sticker svg{width:72px;height:72px}
+.sticker b{font-family:var(--display);font-weight:600}
+.sticker small{color:var(--muted);font-size:.8rem;line-height:1.3}
+.sticker.locked{opacity:.55}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:99px;font-weight:800;z-index:10;max-width:90vw;text-align:center}
+.rep{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 12px;border-radius:10px;background:var(--tile);width:100%}
+.rep b{font-family:var(--display);font-weight:600}
+.reps{display:flex;flex-direction:column;gap:6px;width:100%}
+@media (prefers-reduced-motion:reduce){.shake,.mon,.hurt .mon{animation:none}.bar>div{transition:none}}
 </style>
 </head>
 <body>
@@ -130,11 +153,13 @@ var WORDS=[],TT=[],CUR=null;
 function cap(t){return t.charAt(0).toUpperCase()+t.slice(1)}
 function label(t){return "Week "+t.week+" of "+t.month+" "+t.year}
 var MODES={
+ boss:{name:"Monster Battle",desc:"Spell words to defeat the monster. Lose 3 hearts and it wins."},
  listen:{name:"Listen and Spell",desc:"Hear the word, then type it."},
  gaps:{name:"Missing Letters",desc:"Tap the letters that fill the gaps."},
  scramble:{name:"Unscramble",desc:"Put the mixed-up letters in order."},
  thenthan:{name:"Word Pairs",desc:"Pick the right word for each sentence."},
- flash:{name:"Study Cards",desc:"Look, listen, and learn each word."}
+ flash:{name:"Study Cards",desc:"Look, listen, and learn each word."},
+ testday:{name:"Test Day",desc:"A real practice test. Words read aloud, no hints."}
 };
 var app=document.getElementById("app");
 var prog={};
@@ -146,13 +171,85 @@ function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;
 function stars(n){var s="";for(var i=0;i<3;i++)s+=i<n?"★":"<i>★</i>";return '<span class="stars" aria-label="'+n+' of 3 stars">'+s+"</span>"}
 function speak(t){try{var u=new SpeechSynthesisUtterance(t);u.rate=.85;u.lang="en-US";speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
 var G=null;
+var badges={};
+try{badges=JSON.parse(localStorage.getItem("sort3_badges")||"{}")||{}}catch(e){badges={}}
+function saveB(){try{localStorage.setItem("sort3_badges",JSON.stringify(badges))}catch(e){}}
+function speakSeq(arr){try{speechSynthesis.cancel();arr.forEach(function(t){var u=new SpeechSynthesisUtterance(t);u.rate=.8;u.lang="en-US";speechSynthesis.speak(u)})}catch(e){}}
+var ICONS={
+ star:'<polygon points="36,14 41,28 56,28.5 44,37.5 48.5,52 36,43.5 23.5,52 28,37.5 16,28.5 31,28"/>',
+ bolt:'<polygon points="39,12 22,40 34,40 31,60 50,31 38,31"/>',
+ crown:'<polygon points="16,50 16,24 27,35 36,18 45,35 56,24 56,50"/>',
+ check:'<path d="M20 37l11 11 21-24" fill="none" stroke="var(--surface)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>',
+ heart:'<path d="M36 54C14 40 18 20 30 20c4 0 6 2 6 5 0-3 2-5 6-5 12 0 16 20-6 34z"/>'
+};
+function sticker(icon,tone,locked){
+  return '<svg viewBox="0 0 72 72" aria-hidden="true"><circle cx="36" cy="36" r="33" style="fill:'+(locked?'var(--line)':'var(--'+tone+')')+'"/><g style="fill:'+(locked?'var(--muted)':'var(--surface)')+'">'+ICONS[icon]+'</g></svg>';
+}
+function badgeDefs(){
+  var d=[
+   {id:"first_star",name:"First Star",desc:"Spell a word right on the first try.",icon:"star",tone:"accent"},
+   {id:"streak5",name:"On Fire",desc:"Get 5 right in a row.",icon:"bolt",tone:"bad"},
+   {id:"streak10",name:"Unstoppable",desc:"Get 10 right in a row.",icon:"bolt",tone:"accent"},
+   {id:"perfect",name:"Perfect Round",desc:"Finish a round with no misses.",icon:"check",tone:"good"}];
+  TESTS.forEach(function(t,i){
+    d.push({id:"boss:"+t.id,name:"Monster Slayer",desc:"Beat the monster in "+label(t)+".",icon:"heart",tone:"bad"});
+    d.push({id:"master:"+t.id,name:"Word Master",desc:"Get 3 stars on every word in "+label(t)+".",icon:"crown",tone:"accent"});
+    d.push({id:"testday:"+t.id,name:"Test Day Ace",desc:"Score "+Math.ceil(t.words.length*.9)+" or more on Test Day in "+label(t)+".",icon:"check",tone:"good"});
+  });
+  return d;
+}
+function toast(msg){
+  var el=document.createElement("div");el.className="toast";el.setAttribute("role","status");el.textContent=msg;document.body.appendChild(el);
+  setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el)},3200);
+}
+function unlock(id){
+  if(badges[id])return;badges[id]=1;saveB();
+  var b=badgeDefs().filter(function(x){return x.id===id})[0];
+  if(b)toast("New sticker: "+b.name+(id.indexOf(":")>0?" ("+id.split(":")[0]+")":""));
+}
+function monster(k,state){
+  var cols=["#7a5cf0","#e8744f","#2aa876","#d9519d"],c=cols[k%4],n=(k%3)+1,x=state==="dead"||state==="hurt";
+  var ex=n===1?[60]:n===2?[44,76]:[34,60,86],ey=n===3?[54,46,54]:n===2?[52,52]:[50],r=n===1?15:n===2?11:9;
+  var o='<svg viewBox="0 0 120 112" role="img" aria-label="Monster" class="mon"><path d="M32 26L26 4L50 18ZM88 26L94 4L70 18Z" style="fill:'+c+'"/>'+
+   '<path d="M18 70C8 30 38 12 60 12S112 30 102 70C100 92 84 104 60 104S20 92 18 70Z" style="fill:'+c+'"/><ellipse cx="60" cy="86" rx="30" ry="14" fill="#fff" opacity=".22"/>';
+  ex.forEach(function(px,i){
+    var py=ey[i];
+    if(x)o+='<path d="M'+(px-r*.7)+' '+(py-r*.7)+'L'+(px+r*.7)+' '+(py+r*.7)+'M'+(px+r*.7)+' '+(py-r*.7)+'L'+(px-r*.7)+' '+(py+r*.7)+'" stroke="#2a1530" stroke-width="4" stroke-linecap="round"/>';
+    else o+='<circle cx="'+px+'" cy="'+py+'" r="'+r+'" fill="#fff"/><circle cx="'+(px+2)+'" cy="'+(py+2)+'" r="'+(r*.45)+'" fill="#2a1530"/>';
+  });
+  if(state==="dead")o+='<path d="M44 90Q60 82 76 90" fill="none" stroke="#2a1530" stroke-width="4" stroke-linecap="round"/>';
+  else if(state==="hurt")o+='<ellipse cx="60" cy="88" rx="9" ry="7" fill="#2a1530"/>';
+  else o+='<path d="M38 78Q60 100 82 78Z" fill="#2a1530"/><path d="M44 79L49 87L54 80ZM66 80L71 87L76 79Z" fill="#fff"/>';
+  return o+'</svg>';
+}
+function bossPanel(){
+  var b=G.boss,h="";for(var i=0;i<3;i++)h+=i<b.hearts?"&hearts;":"<i>&hearts;</i>";
+  return monster(b.k,b.state)+'<div class="hp"><div class="tag">Monster HP</div><div class="hpbar"><div style="width:'+Math.round(b.hp/b.max*100)+'%"></div></div><div class="hearts" aria-label="'+b.hearts+' hearts left">'+h+'</div></div>';
+}
+function updateBoss(state){
+  G.boss.state=state;var el=document.getElementById("boss");if(!el)return;
+  el.innerHTML=bossPanel();el.className="boss"+(state==="hurt"?" hurt":"");
+}
+function practiceMissed(list){
+  G={kind:"listen",items:shuffle(list).map(function(w){return{o:WORDS.filter(function(o){return o.w===w})[0]}}),i:0,right:0,missed:[]};step();
+}
 
 function hub(){
   G=null;CUR=null;
   app.innerHTML='<div><div class="tag">Spelling tests</div><h1>Choose a test</h1></div>'+
    '<div class="tests">'+TESTS.map(function(t,i){var m=t.words.filter(function(o){return(prog[o.w]||0)>=3}).length;
-     return '<button class="mode test" data-t="'+i+'"><strong>'+label(t)+'</strong><span>Sort #'+t.sort+' &middot; '+t.words.length+' words &middot; '+m+' mastered</span></button>'}).join("")+'</div>';
+     return '<button class="mode test" data-t="'+i+'"><strong>'+label(t)+'</strong><span>Sort #'+t.sort+' &middot; '+t.words.length+' words &middot; '+m+' mastered</span></button>'}).join("")+'</div>'+
+   '<div class="row"><button class="btn" id="book">Sticker book ('+earned()+' of '+badgeDefs().length+')</button></div>';
+  document.getElementById("book").onclick=book;
   app.querySelectorAll("[data-t]").forEach(function(b){b.onclick=function(){pick(TESTS[+b.dataset.t])}});
+}
+function earned(){return badgeDefs().filter(function(b){return badges[b.id]}).length}
+function book(){
+  var d=badgeDefs();
+  app.innerHTML='<div class="row"><button class="btn ghost" id="all">Back</button></div><div><div class="tag">'+earned()+' of '+d.length+' earned</div><h1>Sticker book</h1></div>'+
+   '<div class="stickers">'+d.map(function(b){var on=!!badges[b.id];
+     return '<div class="sticker'+(on?"":" locked")+'">'+sticker(b.icon,b.tone,!on)+'<b>'+(on?b.name:"Locked")+'</b><small>'+esc(b.desc)+'</small></div>'}).join("")+'</div>';
+  document.getElementById("all").onclick=function(){CUR?home():hub()};
 }
 function pick(t){
   CUR=t;WORDS=t.words;TT=t.items;
@@ -167,7 +264,7 @@ function home(){
    '<div class="row"><button class="btn ghost" id="all">All tests</button></div>'+
    '<div class="top"><div><div class="tag">Sort #'+CUR.sort+' spelling list</div><h1>'+label(CUR)+'</h1></div>'+
    '<div class="card" style="padding:10px 16px"><b>'+mastered+' of '+WORDS.length+'</b> words mastered</div></div>'+
-   '<div class="modes">'+Object.keys(MODES).map(function(k){return '<button class="mode" data-m="'+k+'"><strong>'+MODES[k].name+'</strong><span>'+MODES[k].desc+'</span></button>'}).join("")+'</div>'+
+   '<div class="modes">'+Object.keys(MODES).map(function(k){return '<button class="mode'+(k==="testday"?" alt":"")+'" data-m="'+k+'"><strong>'+MODES[k].name+'</strong><span>'+MODES[k].desc+'</span></button>'}).join("")+'</div>'+
    '<section class="card"><h2>Your words</h2><p class="sentence" style="margin:6px 0 12px">Get a word right on the first try to earn a star. Three stars means mastered. Tap a word to hear it.</p>'+
    '<div class="words">'+WORDS.map(function(o){return '<button class="w" data-say="'+o.w+'"><b>'+o.w+'</b>'+stars(prog[o.w]||0)+'</button>'}).join("")+'</div>'+
    '<p class="sentence" style="margin:14px 0 0">The last two, '+CUR.pair[0]+' and '+CUR.pair[1]+', are the non-negotiables.</p></section>';
@@ -176,29 +273,50 @@ function home(){
   app.querySelectorAll("[data-say]").forEach(function(b){b.onclick=function(){speak(b.dataset.say)}});
 }
 
+function pickMg(){return["listen","gaps","scramble"][Math.floor(Math.random()*3)]}
 function start(kind){
+  if(kind==="boss"){
+    var its=shuffle(WORDS).map(function(o){return{o:o,mg:pickMg()}});
+    G={kind:"boss",items:its,i:0,right:0,missed:[],streak:0,best:0,requeued:{},boss:{hp:its.length,max:its.length,hearts:3,k:TESTS.indexOf(CUR),state:"idle"}};
+    return step();
+  }
+  if(kind==="testday"){
+    G={kind:"testday",items:shuffle(WORDS).map(function(o){return{o:o}}),i:0,right:0,missed:[],answers:[]};
+    return step();
+  }
   var items=kind==="thenthan"?shuffle(TT).map(function(t){return{t:t}}):shuffle(WORDS).map(function(o){return{o:o}});
-  G={kind:kind,items:items,i:0,right:0,missed:[],redo:false};
+  G={kind:kind,items:items,i:0,right:0,missed:[],streak:0,best:0};
   step();
 }
 function header(){
   var pct=Math.round(G.i/G.items.length*100);
-  return '<div class="row"><button class="btn ghost" id="quit">Home</button><div class="bar" role="progressbar" aria-valuenow="'+pct+'" aria-valuemin="0" aria-valuemax="100"><div style="width:'+pct+'%"></div></div><span class="tag">'+Math.min(G.i+1,G.items.length)+' / '+G.items.length+'</span></div>';
+  return '<div class="row"><button class="btn ghost" id="quit">Home</button><div class="bar" role="progressbar" aria-valuenow="'+pct+'" aria-valuemin="0" aria-valuemax="100"><div style="width:'+pct+'%"></div></div><span class="tag">'+Math.min(G.i+1,G.items.length)+' / '+G.items.length+'</span><span class="chip" id="streak"></span></div>'+(G.boss?'<div class="boss" id="boss">'+bossPanel()+'</div>':'');
 }
 function step(){
-  if(G.i>=G.items.length)return end();
+  if(G.i>=G.items.length||(G.boss&&(G.boss.hp<=0||G.boss.hearts<=0)))return end();
   var it=G.items[G.i];
   if(G.kind==="flash")return flash(it.o);
+  if(G.kind==="testday")return testday(it.o);
   app.innerHTML=header()+'<section class="card prompt" id="stage"></section><div id="fb"></div>';
   document.getElementById("quit").onclick=home;
-  if(G.kind==="listen")listen(it.o);
-  else if(G.kind==="gaps")builder(it.o,true);
-  else if(G.kind==="scramble")builder(it.o,false);
+  var k=G.kind==="boss"?it.mg:G.kind;
+  if(k==="listen")listen(it.o);
+  else if(k==="gaps")builder(it.o,true);
+  else if(k==="scramble")builder(it.o,false);
   else thenthan(it.t);
 }
-function finish(word,ok,first){
+function finish(word,ok){
   if(word){bump(word,ok)}
   if(ok)G.right++;else if(word)G.missed.push(word);
+  G.streak=ok?(G.streak||0)+1:0;G.best=Math.max(G.best||0,G.streak);
+  var ch=document.getElementById("streak");if(ch)ch.textContent=G.streak>=2?"Streak x"+G.streak:"";
+  if(ok){unlock("first_star");if(G.streak===5)unlock("streak5");if(G.streak===10)unlock("streak10")}
+  if(CUR&&CUR.words.every(function(o){return(prog[o.w]||0)>=3}))unlock("master:"+CUR.id);
+  if(G.boss){
+    if(ok){G.boss.hp=Math.max(0,G.boss.hp-1);updateBoss("hurt")}
+    else{G.boss.hearts--;updateBoss("idle");
+      if(word&&!G.requeued[word]){G.requeued[word]=1;G.items.push({o:WORDS.filter(function(o){return o.w===word})[0],mg:pickMg()})}}
+  }
   G.i++;
 }
 function feedback(ok,word,msg){
@@ -226,7 +344,7 @@ function listen(o){
       else{msg.textContent="Not quite. Listen again and try one more time.";inp.classList.add("shake");setTimeout(function(){inp.classList.remove("shake")},400);inp.select();}}
   }
   document.getElementById("chk").onclick=check;
-  inp.onkeydown=function(e){if(e.key==="Enter")check()};
+  inp.onkeydown=function(e){if(e.key==="Enter"){e.preventDefault();check()}};
   document.getElementById("hint").onclick=function(){hinted=true;msg.textContent="It starts with "+o.w[0].toUpperCase()+" and has "+o.w.length+" letters."};
 }
 
@@ -282,6 +400,51 @@ function thenthan(t){
     else{tried=true;b.disabled=true;document.getElementById("fb").innerHTML='<div class="fb info">Not that one. Try the other word.</div>';}}});
 }
 
+/* Test Day */
+function testday(o){
+  var last=G.i>=G.items.length-1;
+  app.innerHTML=header()+'<section class="card prompt" id="stage"><div class="tag">Test day &middot; word '+(G.i+1)+' of '+G.items.length+'</div>'+
+   '<p class="sentence">Listen, then spell the word. A real test has no hints and no second tries.</p>'+
+   '<div class="row"><button class="btn" id="hear">&#128266; Hear it again</button></div>'+
+   '<input class="type" id="ans" type="text" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" aria-label="Type the word">'+
+   '<div class="row"><button class="btn" id="go">'+(last?"Finish test":"Next word")+'</button></div></section>';
+  document.getElementById("quit").onclick=home;
+  function say(){speakSeq([o.w,o.x,o.w])}
+  document.getElementById("hear").onclick=say;say();
+  var inp=document.getElementById("ans");inp.focus();
+  function submit(){G.answers.push(inp.value.trim().toLowerCase());G.i++;step()}
+  document.getElementById("go").onclick=submit;
+  inp.onkeydown=function(e){if(e.key==="Enter"){e.preventDefault();submit()}};
+}
+function testEnd(){
+  var n=G.items.length,r=0,rows="",miss=[];
+  G.items.forEach(function(it,i){
+    var a=G.answers[i]||"",ok=a===it.o.w;if(ok)r++;else miss.push(it.o.w);
+    bump(it.o.w,ok);
+    rows+='<div class="rep"><b>'+it.o.w+'</b><span class="'+(ok?"hit":"miss")+'">'+(ok?"Correct":"You wrote: "+esc(a||"(blank)"))+'</span></div>';
+  });
+  if(r>=Math.ceil(n*.9))unlock("testday:"+CUR.id);
+  if(CUR.words.every(function(o){return(prog[o.w]||0)>=3}))unlock("master:"+CUR.id);
+  var pct=Math.round(r/n*100),msg=r===n?"Perfect score!":pct>=90?"Test day ace!":pct>=70?"Good job. A little more practice.":"Keep practicing. Try Study Cards, then test again.";
+  app.innerHTML='<section class="card prompt"><div class="tag">Report card</div><div class="score">'+r+' / '+n+' &middot; '+pct+'%</div><h2>'+msg+'</h2>'+
+   '<div class="reps">'+rows+'</div><div class="row"><button class="btn" id="again">Take it again</button>'+(miss.length?'<button class="btn ghost" id="fix">Practice missed words</button>':'')+'<button class="btn ghost" id="hm">Home</button></div></section>';
+  document.getElementById("again").onclick=function(){start("testday")};
+  var fx=document.getElementById("fix");if(fx)fx.onclick=function(){practiceMissed(miss)};
+  document.getElementById("hm").onclick=home;
+}
+function bossEnd(){
+  var b=G.boss,win=b.hearts>0,n=G.items.length,uniq=G.missed.filter(function(w,i){return G.missed.indexOf(w)===i});
+  if(win)unlock("boss:"+CUR.id);
+  if(win&&uniq.length===0&&n>=10)unlock("perfect");
+  app.innerHTML='<section class="card prompt"><div class="tag">'+(win?"Victory":"Defeated")+'</div><div class="bigmon">'+monster(b.k,win?"dead":"idle")+'</div>'+
+   '<h2>'+(win?"You beat the monster!":"The monster wins this time.")+'</h2>'+
+   '<p class="sentence">Hearts left: <b>'+Math.max(0,b.hearts)+'</b> of 3. Best streak: <b>'+G.best+'</b>.'+(uniq.length?'<br>Words to practice: <span class="miss">'+uniq.join(", ")+'</span>':'')+'</p>'+
+   '<div class="row"><button class="btn" id="again">'+(win?"Fight again":"Rematch")+'</button>'+(uniq.length?'<button class="btn ghost" id="fix">Practice missed words</button>':'')+'<button class="btn ghost" id="hm">Home</button></div></section>';
+  document.getElementById("again").onclick=function(){start("boss")};
+  var fx=document.getElementById("fix");if(fx)fx.onclick=function(){practiceMissed(uniq)};
+  document.getElementById("hm").onclick=home;
+}
+
 /* Study cards */
 function flash(o){
   app.innerHTML=header()+'<section class="card prompt"><div class="tag">Study card</div><div class="big">'+o.w+'</div><div class="syl">'+o.s+'</div>'+
@@ -293,14 +456,17 @@ function flash(o){
 }
 
 function end(){
+  if(G.kind==="boss")return bossEnd();
+  if(G.kind==="testday")return testEnd();
   if(G.kind==="flash"){
     app.innerHTML='<section class="card prompt"><h2>Nice studying!</h2><p class="sentence">Now test yourself. Try Listen and Spell next.</p><div class="row"><button class="btn" id="go">Listen and Spell</button><button class="btn ghost" id="hm">Home</button></div></section>';
     document.getElementById("go").onclick=function(){start("listen")};document.getElementById("hm").onclick=home;return;
   }
   var n=G.items.length,r=G.right,msg=r===n?"Perfect round!":r>=n*.8?"Great work!":r>=n*.5?"Good effort. Keep going!":"Keep practicing. You will get there!";
   var uniq=G.missed.filter(function(w,i){return G.missed.indexOf(w)===i});
+  if(n>=10&&r===n)unlock("perfect");
   app.innerHTML='<section class="card prompt"><div class="tag">Round complete</div><div class="score">'+r+' / '+n+'</div><h2>'+msg+'</h2>'+
-   '<p class="sentence">Right on the first try: <span class="hit">'+r+'</span>'+(uniq.length?'<br>Practice these again: <span class="miss">'+uniq.join(", ")+'</span>':'')+'</p>'+
+   '<p class="sentence">Right on the first try: <span class="hit">'+r+'</span><br>Best streak: <b>'+(G.best||0)+'</b>'+(uniq.length?'<br>Practice these again: <span class="miss">'+uniq.join(", ")+'</span>':'')+'</p>'+
    '<div class="row"><button class="btn" id="again">Play again</button>'+(uniq.length&&G.kind!=="thenthan"?'<button class="btn ghost" id="fix">Practice missed words</button>':'')+'<button class="btn ghost" id="hm">Home</button></div></section>';
   var kind=G.kind,missed=uniq;
   document.getElementById("again").onclick=function(){start(kind)};
