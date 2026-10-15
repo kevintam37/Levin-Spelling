@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Sort 3 Spelling Practice</title>
+<title>Spelling Practice</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap">
 <style>
@@ -38,6 +38,8 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-o
 .w b{font-family:var(--display);font-weight:600;font-size:1.1rem;overflow-wrap:anywhere}
 .stars{color:var(--gold);letter-spacing:1px;white-space:nowrap;font-size:1rem}
 .stars i{font-style:normal;color:var(--line)}
+.tests{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.test strong{font-size:1.4rem}
 .modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
 .mode{background:var(--accent);color:var(--accent-ink);border:0;border-radius:16px;padding:16px;text-align:left;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:4px}
 .mode strong{font-family:var(--display);font-size:1.25rem;font-weight:600}
@@ -81,32 +83,57 @@ input.type{width:100%;font-family:var(--display);font-size:1.7rem;font-weight:60
 <main id="app"></main>
 
 <script>
-var WORDS=[
- {w:"courageous",s:"cou-ra-geous",x:"The courageous firefighter ran back into the building."},
- {w:"marvelous",s:"mar-vel-ous",x:"We saw a marvelous rainbow after the storm."},
- {w:"humorous",s:"hu-mor-ous",x:"My dad told a humorous story at dinner."},
- {w:"rebellious",s:"re-bel-lious",x:"The rebellious cat refused to stay off the table."},
- {w:"delightful",s:"de-light-ful",x:"The picnic in the park was delightful."},
- {w:"furious",s:"fu-ri-ous",x:"She was furious when her tower got knocked over."},
- {w:"studious",s:"stu-di-ous",x:"The studious student read every night."},
- {w:"nervous",s:"ner-vous",x:"I felt nervous before my big test."},
- {w:"successful",s:"suc-cess-ful",x:"Their science project was successful."},
- {w:"outrageous",s:"out-ra-geous",x:"The price of that toy is outrageous!"},
- {w:"than",s:"than",x:"My brother is taller than me."},
- {w:"then",s:"then",x:"First we eat lunch, then we go outside."}
+function W(w,s,x){return{w:w,s:s,x:x}}
+var TESTS=[
+ {id:"2026-10-w3",week:3,month:"October",year:2026,sort:5,pair:["quiet","quite"],
+  hint:"<b>quiet</b> means with little or no noise. <b>quite</b> means very or completely.",
+  words:[
+   W("tutorial","tu-to-ri-al","The online tutorial showed us how to play the game."),
+   W("memorial","me-mo-ri-al","We visited the memorial to honor the soldiers."),
+   W("burial","bur-i-al","The explorers found an ancient burial ground."),
+   W("heroic","he-ro-ic","The dog made a heroic rescue."),
+   W("angelic","an-gel-ic","The sleeping baby had an angelic face."),
+   W("rhythmic","rhyth-mic","The drummer kept a rhythmic beat."),
+   W("accidental","ac-ci-den-tal","Spilling the juice was accidental."),
+   W("logical","log-i-cal","It is logical to wear a coat in winter."),
+   W("global","glo-bal","Climate change is a global problem."),
+   W("territorial","ter-ri-to-ri-al","The territorial dog barked at every stranger."),
+   W("quiet","qui-et","Please be quiet in the library."),
+   W("quite","quite","The movie was quite funny.")],
+  items:[["The library is very ___ today.","quiet"],["It was ___ cold outside.","quite"],
+   ["Please be ___ during the test.","quiet"],["I am ___ sure I locked the door.","quite"],
+   ["The ___ night helped me sleep.","quiet"],["That puzzle is ___ hard.","quite"],
+   ["The mouse was ___ as it crept across the floor.","quiet"],["She has ___ a few friends.","quite"],
+   ["Let's find a ___ spot to read.","quiet"],["He ran ___ fast to catch the bus.","quite"]]},
+ {id:"2026-09-w4",week:4,month:"September",year:2026,sort:3,pair:["than","then"],
+  hint:"<b>than</b> compares two things. <b>then</b> tells what happens next.",
+  words:[
+   W("courageous","cou-ra-geous","The courageous firefighter ran back into the building."),
+   W("marvelous","mar-vel-ous","We saw a marvelous rainbow after the storm."),
+   W("humorous","hu-mor-ous","My dad told a humorous story at dinner."),
+   W("rebellious","re-bel-lious","The rebellious cat refused to stay off the table."),
+   W("delightful","de-light-ful","The picnic in the park was delightful."),
+   W("furious","fu-ri-ous","She was furious when her tower got knocked over."),
+   W("studious","stu-di-ous","The studious student read every night."),
+   W("nervous","ner-vous","I felt nervous before my big test."),
+   W("successful","suc-cess-ful","Their science project was successful."),
+   W("outrageous","out-ra-geous","The price of that toy is outrageous!"),
+   W("than","than","My brother is taller than me."),
+   W("then","then","First we eat lunch, then we go outside.")],
+  items:[["I would rather read ___ watch TV.","than"],["First we brush our teeth, ___ we go to bed.","then"],
+   ["A cheetah is faster ___ a horse.","than"],["Mix the flour and eggs, ___ add the milk.","then"],
+   ["This book is funnier ___ that one.","than"],["We finished dinner, and ___ we had dessert.","then"],
+   ["She is braver ___ she thinks.","than"],["If it rains, ___ we will stay inside.","then"],
+   ["My backpack is heavier ___ yours.","than"],["Wait until the bell rings, ___ line up.","then"]]}
 ];
-var TT=[
- ["I would rather read ___ watch TV.","than"],["First we brush our teeth, ___ we go to bed.","then"],
- ["A cheetah is faster ___ a horse.","than"],["Mix the flour and eggs, ___ add the milk.","then"],
- ["This book is funnier ___ that one.","than"],["We finished dinner, and ___ we had dessert.","then"],
- ["She is braver ___ she thinks.","than"],["If it rains, ___ we will stay inside.","then"],
- ["My backpack is heavier ___ yours.","than"],["Wait until the bell rings, ___ line up.","then"]
-];
+var WORDS=[],TT=[],CUR=null;
+function cap(t){return t.charAt(0).toUpperCase()+t.slice(1)}
+function label(t){return "Week "+t.week+" of "+t.month+" "+t.year}
 var MODES={
  listen:{name:"Listen and Spell",desc:"Hear the word, then type it."},
  gaps:{name:"Missing Letters",desc:"Tap the letters that fill the gaps."},
  scramble:{name:"Unscramble",desc:"Put the mixed-up letters in order."},
- thenthan:{name:"Than or Then",desc:"Pick the right word for each sentence."},
+ thenthan:{name:"Word Pairs",desc:"Pick the right word for each sentence."},
  flash:{name:"Study Cards",desc:"Look, listen, and learn each word."}
 };
 var app=document.getElementById("app");
@@ -120,16 +147,31 @@ function stars(n){var s="";for(var i=0;i<3;i++)s+=i<n?"★":"<i>★</i>";return 
 function speak(t){try{var u=new SpeechSynthesisUtterance(t);u.rate=.85;u.lang="en-US";speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
 var G=null;
 
+function hub(){
+  G=null;CUR=null;
+  app.innerHTML='<div><div class="tag">Spelling tests</div><h1>Choose a test</h1></div>'+
+   '<div class="tests">'+TESTS.map(function(t,i){var m=t.words.filter(function(o){return(prog[o.w]||0)>=3}).length;
+     return '<button class="mode test" data-t="'+i+'"><strong>'+label(t)+'</strong><span>Sort #'+t.sort+' &middot; '+t.words.length+' words &middot; '+m+' mastered</span></button>'}).join("")+'</div>';
+  app.querySelectorAll("[data-t]").forEach(function(b){b.onclick=function(){pick(TESTS[+b.dataset.t])}});
+}
+function pick(t){
+  CUR=t;WORDS=t.words;TT=t.items;
+  MODES.thenthan.name=cap(t.pair[0])+" or "+cap(t.pair[1]);
+  home();
+}
 function home(){
+  if(!CUR)return hub();
   G=null;
   var mastered=WORDS.filter(function(o){return(prog[o.w]||0)>=3}).length;
   app.innerHTML=
-   '<div class="top"><div><div class="tag">Sort #3 spelling list</div><h1>Spelling Practice</h1></div>'+
-   '<div class="card" style="padding:10px 16px"><b>'+mastered+' of 12</b> words mastered</div></div>'+
+   '<div class="row"><button class="btn ghost" id="all">All tests</button></div>'+
+   '<div class="top"><div><div class="tag">Sort #'+CUR.sort+' spelling list</div><h1>'+label(CUR)+'</h1></div>'+
+   '<div class="card" style="padding:10px 16px"><b>'+mastered+' of '+WORDS.length+'</b> words mastered</div></div>'+
    '<div class="modes">'+Object.keys(MODES).map(function(k){return '<button class="mode" data-m="'+k+'"><strong>'+MODES[k].name+'</strong><span>'+MODES[k].desc+'</span></button>'}).join("")+'</div>'+
    '<section class="card"><h2>Your words</h2><p class="sentence" style="margin:6px 0 12px">Get a word right on the first try to earn a star. Three stars means mastered. Tap a word to hear it.</p>'+
    '<div class="words">'+WORDS.map(function(o){return '<button class="w" data-say="'+o.w+'"><b>'+o.w+'</b>'+stars(prog[o.w]||0)+'</button>'}).join("")+'</div>'+
-   '<p class="sentence" style="margin:14px 0 0">The last two, than and then, are the non-negotiables.</p></section>';
+   '<p class="sentence" style="margin:14px 0 0">The last two, '+CUR.pair[0]+' and '+CUR.pair[1]+', are the non-negotiables.</p></section>';
+  document.getElementById("all").onclick=hub;
   app.querySelectorAll("[data-m]").forEach(function(b){b.onclick=function(){start(b.dataset.m)}});
   app.querySelectorAll("[data-say]").forEach(function(b){b.onclick=function(){speak(b.dataset.say)}});
 }
@@ -195,7 +237,7 @@ function builder(o,gaps){
   if(gaps){var cnt=n<=4?1:(n<=8?2:3),pos=shuffle(L.map(function(_,i){return i})).slice(0,cnt);missing=pos}
   var slots=L.map(function(ch,i){var fixed=gaps&&missing.indexOf(i)<0;return{ch:ch,fixed:fixed,bi:fixed?-2:-1}});
   var need=gaps?missing.map(function(i){return L[i]}):L.slice();
-  var extras=gaps?shuffle("abcdefghilmnorstuv".split("").filter(function(c){return need.indexOf(c)<0})).slice(0,3):[];
+  var extras=gaps?shuffle("abcdefghiklmnoprstuvy".split("").filter(function(c){return need.indexOf(c)<0})).slice(0,3):[];
   var bank=shuffle(need.concat(extras)).map(function(c){return{ch:c,used:false}});
   if(!gaps&&n>1){var tries=0;while(bank.map(function(b){return b.ch}).join("")===word&&tries++<10)bank=shuffle(bank)}
   var wrong=false,done=false;
@@ -232,12 +274,11 @@ function builder(o,gaps){
 function thenthan(t){
   var st=document.getElementById("stage"),parts=t[0].split("___"),tried=false;
   st.innerHTML='<div class="tag">Which word fits?</div><p class="big" style="font-size:clamp(1.4rem,5vw,2rem);letter-spacing:0">'+esc(parts[0])+'<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>'+esc(parts[1])+'</p>'+
-   '<div class="choices"><button class="btn" data-c="than">than</button><button class="btn" data-c="then">then</button></div>'+
-   '<p class="sentence"><b>than</b> compares two things. <b>then</b> tells what happens next.</p>';
+   '<div class="choices"><button class="btn" data-c="'+CUR.pair[0]+'">'+CUR.pair[0]+'</button><button class="btn" data-c="'+CUR.pair[1]+'">'+CUR.pair[1]+'</button></div>'+
+   '<p class="sentence">'+CUR.hint+'</p>';
   st.querySelectorAll("[data-c]").forEach(function(b){b.onclick=function(){
     if(b.dataset.c===t[1]){st.querySelectorAll("[data-c]").forEach(function(x){x.disabled=true});
-      finish(t[1],!tried);if(!tried)G.right;feedback(true,t[1],tried?"Correct!":"Correct on the first try!");
-      document.querySelector("#fb .word").textContent=t[1];}
+      finish(t[1],!tried);if(!tried)G.right;feedback(true,t[1],tried?"Correct!":"Correct on the first try!");}
     else{tried=true;b.disabled=true;document.getElementById("fb").innerHTML='<div class="fb info">Not that one. Try the other word.</div>';}}});
 }
 
@@ -267,7 +308,7 @@ function end(){
   if(fx)fx.onclick=function(){G={kind:kind,items:shuffle(missed).map(function(w){return{o:WORDS.filter(function(o){return o.w===w})[0]}}),i:0,right:0,missed:[]};step()};
   document.getElementById("hm").onclick=home;
 }
-home();
+hub();
 </script>
 
 </body>
