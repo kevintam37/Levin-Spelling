@@ -108,6 +108,26 @@ input.type{width:100%;font-family:var(--display);font-size:1.7rem;font-weight:60
 <script>
 function W(w,s,x){return{w:w,s:s,x:x}}
 var TESTS=[
+ {id:"2026-10-w4",week:4,month:"October",year:2026,sort:6,pair:["through","threw"],
+  hint:"<b>through</b> means going in one side and out the other. <b>threw</b> is the past tense of throw.",
+  words:[
+   W("confession","con-fes-sion","He made a confession that he ate the last cookie."),
+   W("selection","se-lec-tion","The library has a large selection of books."),
+   W("depression","de-pres-sion","Rain collected in a deep depression in the ground."),
+   W("procession","pro-ces-sion","The parade was a long procession of floats."),
+   W("possession","pos-ses-sion","My bike is my favorite possession."),
+   W("discuss","dis-cuss","Let's discuss our plan for the project."),
+   W("express","ex-press","Words can express how we feel."),
+   W("collection","col-lec-tion","She has a collection of seashells."),
+   W("protect","pro-tect","A helmet helps protect your head."),
+   W("emission","e-mis-sion","The factory worked to reduce the emission of smoke."),
+   W("through","through","We walked through the tunnel."),
+   W("threw","threw","He threw the ball over the fence.")],
+  items:[["We walked ___ the forest.","through"],["She ___ the ball to her friend.","threw"],
+   ["The train went ___ the tunnel.","through"],["He ___ his hat into the air.","threw"],
+   ["Water flows ___ the pipe.","through"],["I ___ away the old papers.","threw"],
+   ["We looked ___ the window.","through"],["The pitcher ___ a fast ball.","threw"],
+   ["Read the book all the way ___.","through"],["Yesterday, Dad ___ the frisbee to the dog.","threw"]]},
  {id:"2026-10-w3",week:3,month:"October",year:2026,sort:5,pair:["quiet","quite"],
   hint:"<b>quiet</b> means with little or no noise. <b>quite</b> means very or completely.",
   words:[
@@ -277,7 +297,7 @@ function pickMg(){return["listen","gaps","scramble"][Math.floor(Math.random()*3)
 function start(kind){
   if(kind==="boss"){
     var its=shuffle(WORDS).map(function(o){return{o:o,mg:pickMg()}});
-    G={kind:"boss",items:its,i:0,right:0,missed:[],streak:0,best:0,requeued:{},boss:{hp:its.length,max:its.length,hearts:3,k:TESTS.indexOf(CUR),state:"idle"}};
+    G={kind:"boss",items:its,i:0,right:0,missed:[],streak:0,best:0,requeued:{},boss:{hp:its.length,max:its.length,hearts:3,k:CUR.sort,state:"idle"}};
     return step();
   }
   if(kind==="testday"){
