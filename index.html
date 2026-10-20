@@ -33,8 +33,9 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-o
 .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
 .tag{font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:800}
 .card{background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:18px}
-.words{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
-.w{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--tile);border-radius:12px;padding:10px 14px;border:0;text-align:left;min-width:0}
+.words{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.w small{display:block;color:var(--muted);font-size:.8rem;line-height:1.3;font-weight:600;margin-top:2px}
+.w{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;background:var(--tile);border-radius:12px;padding:10px 14px;border:0;text-align:left;min-width:0}
 .w b{font-family:var(--display);font-weight:600;font-size:1.1rem;overflow-wrap:anywhere}
 .stars{color:var(--gold);letter-spacing:1px;white-space:nowrap;font-size:1rem}
 .stars i{font-style:normal;color:var(--line)}
@@ -94,6 +95,9 @@ input.type{width:100%;font-family:var(--display);font-size:1.7rem;font-weight:60
 .sticker small{color:var(--muted);font-size:.8rem;line-height:1.3}
 .sticker.locked{opacity:.55}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:99px;font-weight:800;z-index:10;max-width:90vw;text-align:center}
+.arena{border:2px solid var(--line);border-radius:16px;overflow:hidden;background:var(--tile)}
+.arena canvas{display:block;width:100%;height:auto;aspect-ratio:2/1;touch-action:none;cursor:grab}
+.pill{font-weight:800;font-size:.9rem;background:var(--surface);border:2px solid var(--line);border-radius:99px;padding:4px 12px;white-space:nowrap}
 .rep{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 12px;border-radius:10px;background:var(--tile);width:100%}
 .rep b{font-family:var(--display);font-weight:600}
 .reps{display:flex;flex-direction:column;gap:6px;width:100%}
@@ -106,23 +110,23 @@ input.type{width:100%;font-family:var(--display);font-size:1.7rem;font-weight:60
 <main id="app"></main>
 
 <script>
-function W(w,s,x){return{w:w,s:s,x:x}}
+function W(w,s,x,d){return{w:w,s:s,x:x,d:d}}
 var TESTS=[
  {id:"2026-10-w4",week:4,month:"October",year:2026,sort:6,pair:["through","threw"],
   hint:"<b>through</b> means going in one side and out the other. <b>threw</b> is the past tense of throw.",
   words:[
-   W("confession","con-fes-sion","He made a confession that he ate the last cookie."),
-   W("selection","se-lec-tion","The library has a large selection of books."),
-   W("depression","de-pres-sion","Rain collected in a deep depression in the ground."),
-   W("procession","pro-ces-sion","The parade was a long procession of floats."),
-   W("possession","pos-ses-sion","My bike is my favorite possession."),
-   W("discuss","dis-cuss","Let's discuss our plan for the project."),
-   W("express","ex-press","Words can express how we feel."),
-   W("collection","col-lec-tion","She has a collection of seashells."),
-   W("protect","pro-tect","A helmet helps protect your head."),
-   W("emission","e-mis-sion","The factory worked to reduce the emission of smoke."),
-   W("through","through","We walked through the tunnel."),
-   W("threw","threw","He threw the ball over the fence.")],
+   W("confession","con-fes-sion","He made a confession that he ate the last cookie.","Telling the truth about something wrong that you did."),
+   W("selection","se-lec-tion","The library has a large selection of books.","A choice, or a group of things to choose from."),
+   W("depression","de-pres-sion","Rain collected in a deep depression in the ground.","A hollow place. A low area that sinks below the surface around it."),
+   W("procession","pro-ces-sion","The parade was a long procession of floats.","A line of people or vehicles moving along in order, like a parade."),
+   W("possession","pos-ses-sion","My bike is my favorite possession.","Something that you own."),
+   W("discuss","dis-cuss","Let's discuss our plan for the project.","To talk about something with other people."),
+   W("express","ex-press","Words can express how we feel.","To show a feeling or an idea with words or actions."),
+   W("collection","col-lec-tion","She has a collection of seashells.","A group of things gathered together."),
+   W("protect","pro-tect","A helmet helps protect your head.","To keep safe from harm."),
+   W("emission","e-mis-sion","The factory worked to reduce the emission of smoke.","Something let out into the air, like gas or smoke."),
+   W("through","through","We walked through the tunnel.","Going in one side and out the other."),
+   W("threw","threw","He threw the ball over the fence.","The past tense of throw. Sent something through the air with your arm.")],
   items:[["We walked ___ the forest.","through"],["She ___ the ball to her friend.","threw"],
    ["The train went ___ the tunnel.","through"],["He ___ his hat into the air.","threw"],
    ["Water flows ___ the pipe.","through"],["I ___ away the old papers.","threw"],
@@ -131,18 +135,18 @@ var TESTS=[
  {id:"2026-10-w3",week:3,month:"October",year:2026,sort:5,pair:["quiet","quite"],
   hint:"<b>quiet</b> means with little or no noise. <b>quite</b> means very or completely.",
   words:[
-   W("tutorial","tu-to-ri-al","The online tutorial showed us how to play the game."),
-   W("memorial","me-mo-ri-al","We visited the memorial to honor the soldiers."),
-   W("burial","bur-i-al","The explorers found an ancient burial ground."),
-   W("heroic","he-ro-ic","The dog made a heroic rescue."),
-   W("angelic","an-gel-ic","The sleeping baby had an angelic face."),
-   W("rhythmic","rhyth-mic","The drummer kept a rhythmic beat."),
-   W("accidental","ac-ci-den-tal","Spilling the juice was accidental."),
-   W("logical","log-i-cal","It is logical to wear a coat in winter."),
-   W("global","glo-bal","Climate change is a global problem."),
-   W("territorial","ter-ri-to-ri-al","The territorial dog barked at every stranger."),
-   W("quiet","qui-et","Please be quiet in the library."),
-   W("quite","quite","The movie was quite funny.")],
+   W("tutorial","tu-to-ri-al","The online tutorial showed us how to play the game.","A lesson that teaches you how to do something, step by step."),
+   W("memorial","me-mo-ri-al","We visited the memorial to honor the soldiers.","Something built or done to remember a person or an event."),
+   W("burial","bur-i-al","The explorers found an ancient burial ground.","Placing someone who has died into a grave."),
+   W("heroic","he-ro-ic","The dog made a heroic rescue.","Very brave, like a hero."),
+   W("angelic","an-gel-ic","The sleeping baby had an angelic face.","Like an angel. Very kind, good, and gentle."),
+   W("rhythmic","rhyth-mic","The drummer kept a rhythmic beat.","Having a regular, repeating beat or pattern."),
+   W("accidental","ac-ci-den-tal","Spilling the juice was accidental.","Happening by chance, not on purpose."),
+   W("logical","log-i-cal","It is logical to wear a coat in winter.","Making sense. Based on clear, careful thinking."),
+   W("global","glo-bal","Climate change is a global problem.","Having to do with the whole world."),
+   W("territorial","ter-ri-to-ri-al","The territorial dog barked at every stranger.","Guarding an area as its own. Also, having to do with an area of land."),
+   W("quiet","qui-et","Please be quiet in the library.","Making little or no noise."),
+   W("quite","quite","The movie was quite funny.","Very, or completely.")],
   items:[["The library is very ___ today.","quiet"],["It was ___ cold outside.","quite"],
    ["Please be ___ during the test.","quiet"],["I am ___ sure I locked the door.","quite"],
    ["The ___ night helped me sleep.","quiet"],["That puzzle is ___ hard.","quite"],
@@ -151,18 +155,18 @@ var TESTS=[
  {id:"2026-09-w4",week:4,month:"September",year:2026,sort:3,pair:["than","then"],
   hint:"<b>than</b> compares two things. <b>then</b> tells what happens next.",
   words:[
-   W("courageous","cou-ra-geous","The courageous firefighter ran back into the building."),
-   W("marvelous","mar-vel-ous","We saw a marvelous rainbow after the storm."),
-   W("humorous","hu-mor-ous","My dad told a humorous story at dinner."),
-   W("rebellious","re-bel-lious","The rebellious cat refused to stay off the table."),
-   W("delightful","de-light-ful","The picnic in the park was delightful."),
-   W("furious","fu-ri-ous","She was furious when her tower got knocked over."),
-   W("studious","stu-di-ous","The studious student read every night."),
-   W("nervous","ner-vous","I felt nervous before my big test."),
-   W("successful","suc-cess-ful","Their science project was successful."),
-   W("outrageous","out-ra-geous","The price of that toy is outrageous!"),
-   W("than","than","My brother is taller than me."),
-   W("then","then","First we eat lunch, then we go outside.")],
+   W("courageous","cou-ra-geous","The courageous firefighter ran back into the building.","Brave. Doing the right thing even when it is scary or hard."),
+   W("marvelous","mar-vel-ous","We saw a marvelous rainbow after the storm.","Wonderful and amazing. Extremely good."),
+   W("humorous","hu-mor-ous","My dad told a humorous story at dinner.","Funny. Full of jokes or fun."),
+   W("rebellious","re-bel-lious","The rebellious cat refused to stay off the table.","Refusing to obey rules or follow orders."),
+   W("delightful","de-light-ful","The picnic in the park was delightful.","Very pleasing. Giving great joy."),
+   W("furious","fu-ri-ous","She was furious when her tower got knocked over.","Extremely angry."),
+   W("studious","stu-di-ous","The studious student read every night.","Spending a lot of time studying and learning."),
+   W("nervous","ner-vous","I felt nervous before my big test.","Worried or a little afraid about what might happen."),
+   W("successful","suc-cess-ful","Their science project was successful.","Reaching a goal. Doing well at what you tried."),
+   W("outrageous","out-ra-geous","The price of that toy is outrageous!","Shocking or far too much. Way over the top."),
+   W("than","than","My brother is taller than me.","A word used to compare two things."),
+   W("then","then","First we eat lunch, then we go outside.","At that time, or what happens next.")],
   items:[["I would rather read ___ watch TV.","than"],["First we brush our teeth, ___ we go to bed.","then"],
    ["A cheetah is faster ___ a horse.","than"],["Mix the flour and eggs, ___ add the milk.","then"],
    ["This book is funnier ___ that one.","than"],["We finished dinner, and ___ we had dessert.","then"],
@@ -174,6 +178,7 @@ function cap(t){return t.charAt(0).toUpperCase()+t.slice(1)}
 function label(t){return "Week "+t.week+" of "+t.month+" "+t.year}
 var MODES={
  boss:{name:"Monster Battle",desc:"Spell words to defeat the monster. Lose 3 hearts and it wins."},
+ sling:{name:"Sling Showdown",desc:"Every word you spell earns a shot. Knock out the monsters."},
  listen:{name:"Listen and Spell",desc:"Hear the word, then type it."},
  gaps:{name:"Missing Letters",desc:"Tap the letters that fill the gaps."},
  scramble:{name:"Unscramble",desc:"Put the mixed-up letters in order."},
@@ -210,7 +215,9 @@ function badgeDefs(){
    {id:"first_star",name:"First Star",desc:"Spell a word right on the first try.",icon:"star",tone:"accent"},
    {id:"streak5",name:"On Fire",desc:"Get 5 right in a row.",icon:"bolt",tone:"bad"},
    {id:"streak10",name:"Unstoppable",desc:"Get 10 right in a row.",icon:"bolt",tone:"accent"},
-   {id:"perfect",name:"Perfect Round",desc:"Finish a round with no misses.",icon:"check",tone:"good"}];
+   {id:"perfect",name:"Perfect Round",desc:"Finish a round with no misses.",icon:"check",tone:"good"},
+   {id:"sling_win",name:"Sharpshooter",desc:"Clear a level in Sling Showdown.",icon:"star",tone:"good"},
+   {id:"sling_all",name:"Sling Champion",desc:"Clear all 3 levels in Sling Showdown.",icon:"crown",tone:"bad"}];
   TESTS.forEach(function(t,i){
     d.push({id:"boss:"+t.id,name:"Monster Slayer",desc:"Beat the monster in "+label(t)+".",icon:"heart",tone:"bad"});
     d.push({id:"master:"+t.id,name:"Word Master",desc:"Get 3 stars on every word in "+label(t)+".",icon:"crown",tone:"accent"});
@@ -255,7 +262,7 @@ function practiceMissed(list){
 }
 
 function hub(){
-  G=null;CUR=null;
+  stopArena();G=null;CUR=null;
   app.innerHTML='<div><div class="tag">Spelling tests</div><h1>Choose a test</h1></div>'+
    '<div class="tests">'+TESTS.map(function(t,i){var m=t.words.filter(function(o){return(prog[o.w]||0)>=3}).length;
      return '<button class="mode test" data-t="'+i+'"><strong>'+label(t)+'</strong><span>Sort #'+t.sort+' &middot; '+t.words.length+' words &middot; '+m+' mastered</span></button>'}).join("")+'</div>'+
@@ -278,7 +285,7 @@ function pick(t){
 }
 function home(){
   if(!CUR)return hub();
-  G=null;
+  stopArena();G=null;
   var mastered=WORDS.filter(function(o){return(prog[o.w]||0)>=3}).length;
   app.innerHTML=
    '<div class="row"><button class="btn ghost" id="all">All tests</button></div>'+
@@ -286,7 +293,7 @@ function home(){
    '<div class="card" style="padding:10px 16px"><b>'+mastered+' of '+WORDS.length+'</b> words mastered</div></div>'+
    '<div class="modes">'+Object.keys(MODES).map(function(k){return '<button class="mode'+(k==="testday"?" alt":"")+'" data-m="'+k+'"><strong>'+MODES[k].name+'</strong><span>'+MODES[k].desc+'</span></button>'}).join("")+'</div>'+
    '<section class="card"><h2>Your words</h2><p class="sentence" style="margin:6px 0 12px">Get a word right on the first try to earn a star. Three stars means mastered. Tap a word to hear it.</p>'+
-   '<div class="words">'+WORDS.map(function(o){return '<button class="w" data-say="'+o.w+'"><b>'+o.w+'</b>'+stars(prog[o.w]||0)+'</button>'}).join("")+'</div>'+
+   '<div class="words">'+WORDS.map(function(o){return '<button class="w" data-say="'+o.w+'"><span style="min-width:0"><b>'+o.w+'</b><small>'+esc(o.d)+'</small></span>'+stars(prog[o.w]||0)+'</button>'}).join("")+'</div>'+
    '<p class="sentence" style="margin:14px 0 0">The last two, '+CUR.pair[0]+' and '+CUR.pair[1]+', are the non-negotiables.</p></section>';
   document.getElementById("all").onclick=hub;
   app.querySelectorAll("[data-m]").forEach(function(b){b.onclick=function(){start(b.dataset.m)}});
@@ -295,6 +302,11 @@ function home(){
 
 function pickMg(){return["listen","gaps","scramble"][Math.floor(Math.random()*3)]}
 function start(kind){
+  stopArena();
+  if(kind==="sling"){
+    G={kind:"sling",items:shuffle(WORDS).map(function(o){return{o:o,mg:pickMg()}}),i:0,right:0,missed:[],streak:0,best:0};
+    return step();
+  }
   if(kind==="boss"){
     var its=shuffle(WORDS).map(function(o){return{o:o,mg:pickMg()}});
     G={kind:"boss",items:its,i:0,right:0,missed:[],streak:0,best:0,requeued:{},boss:{hp:its.length,max:its.length,hearts:3,k:CUR.sort,state:"idle"}};
@@ -313,6 +325,7 @@ function header(){
   return '<div class="row"><button class="btn ghost" id="quit">Home</button><div class="bar" role="progressbar" aria-valuenow="'+pct+'" aria-valuemin="0" aria-valuemax="100"><div style="width:'+pct+'%"></div></div><span class="tag">'+Math.min(G.i+1,G.items.length)+' / '+G.items.length+'</span><span class="chip" id="streak"></span></div>'+(G.boss?'<div class="boss" id="boss">'+bossPanel()+'</div>':'');
 }
 function step(){
+  if(G.kind==="sling")return slingStep();
   if(G.i>=G.items.length||(G.boss&&(G.boss.hp<=0||G.boss.hearts<=0)))return end();
   var it=G.items[G.i];
   if(G.kind==="flash")return flash(it.o);
@@ -325,13 +338,15 @@ function step(){
   else if(k==="scramble")builder(it.o,false);
   else thenthan(it.t);
 }
-function finish(word,ok){
+function finish(word,ok,solved){
+  if(solved===undefined)solved=ok;
   if(word){bump(word,ok)}
   if(ok)G.right++;else if(word)G.missed.push(word);
   G.streak=ok?(G.streak||0)+1:0;G.best=Math.max(G.best||0,G.streak);
   var ch=document.getElementById("streak");if(ch)ch.textContent=G.streak>=2?"Streak x"+G.streak:"";
   if(ok){unlock("first_star");if(G.streak===5)unlock("streak5");if(G.streak===10)unlock("streak10")}
   if(CUR&&CUR.words.every(function(o){return(prog[o.w]||0)>=3}))unlock("master:"+CUR.id);
+  if(G.kind==="sling"&&S&&solved){S.ammo++;slingUI();toast("+1 shot! Pull back the sling.")}
   if(G.boss){
     if(ok){G.boss.hp=Math.max(0,G.boss.hp-1);updateBoss("hurt")}
     else{G.boss.hearts--;updateBoss("idle");
@@ -341,7 +356,7 @@ function finish(word,ok){
 }
 function feedback(ok,word,msg){
   var fb=document.getElementById("fb");
-  fb.innerHTML='<div class="fb '+(ok?"good":"bad")+'"><span>'+msg+' <span class="word">'+esc(word)+'</span></span><button class="btn" id="nx">'+(G.i>=G.items.length?"See results":"Next")+'</button></div>';
+  fb.innerHTML='<div class="fb '+(ok?"good":"bad")+'"><span>'+msg+' <span class="word">'+esc(word)+'</span></span><button class="btn" id="nx">'+(G.kind==="sling"?(G.i>=G.items.length?"Done spelling":"Next word"):(G.i>=G.items.length?"See results":"Next"))+'</button></div>';
   var nx=document.getElementById("nx");nx.onclick=step;nx.focus();
 }
 function speakBtn(text,label){return '<button class="btn" data-sp="'+esc(text)+'"><span class="spk">&#128266; '+label+'</span></button>'}
@@ -350,15 +365,15 @@ function wireSpeak(root){root.querySelectorAll("[data-sp]").forEach(function(b){
 /* Listen and Spell */
 function listen(o){
   var st=document.getElementById("stage"),tries=0,hinted=false;
-  st.innerHTML='<div class="tag">Type the word you hear</div><div class="row">'+speakBtn(o.w,"Say the word")+speakBtn(o.x,"Use it in a sentence")+'</div>'+
+  st.innerHTML='<div class="tag">Type the word you hear</div><div class="row">'+speakBtn(o.w,"Say the word")+speakBtn(o.x,"Use it in a sentence")+speakBtn(o.d,"What it means")+'</div>'+
    '<input class="type" id="ans" type="text" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" aria-label="Type the word" placeholder="'+o.w.length+' letters">'+
    '<div class="row"><button class="btn" id="chk">Check</button><button class="btn ghost" id="hint">Show first letter</button></div><div id="msg" class="sentence"></div>';
   wireSpeak(st);speak(o.w);
   var inp=document.getElementById("ans"),msg=document.getElementById("msg");inp.focus();
   function check(){
     var v=inp.value.trim().toLowerCase();if(!v)return;
-    if(v===o.w){inp.disabled=true;var first=tries===0&&!hinted;finish(o.w,first);feedback(true,o.w,first?"Correct on the first try!":"Correct!");}
-    else{tries++;if(tries>=2){inp.disabled=true;finish(o.w,false);
+    if(v===o.w){inp.disabled=true;var first=tries===0&&!hinted;finish(o.w,first,true);feedback(true,o.w,first?"Correct on the first try!":"Correct!");}
+    else{tries++;if(tries>=2){inp.disabled=true;finish(o.w,false,false);
       var d="";for(var i=0;i<o.w.length;i++){d+=(v[i]===o.w[i])?o.w[i]:'<u>'+o.w[i]+'</u>'}
       feedback(false,o.w,"The word is");document.querySelector("#fb .word").innerHTML=d;}
       else{msg.textContent="Not quite. Listen again and try one more time.";inp.classList.add("shake");setTimeout(function(){inp.classList.remove("shake")},400);inp.select();}}
@@ -381,7 +396,7 @@ function builder(o,gaps){
   var wrong=false,done=false;
   function draw(){
     st.innerHTML='<div class="tag">'+(gaps?"Fill in the missing letters":"Unscramble the letters")+'</div>'+
-     '<div class="row">'+speakBtn(word,"Hear it")+speakBtn(o.x,"Sentence")+'</div>'+
+     '<div class="row">'+speakBtn(word,"Hear it")+speakBtn(o.x,"Sentence")+speakBtn(o.d,"Meaning")+'</div>'+
      '<div class="slots" id="slots">'+slots.map(function(s,i){
         if(s.fixed)return '<div class="slot fixed">'+s.ch+'</div>';
         if(s.bi>=0)return '<button class="slot filled" data-s="'+i+'" aria-label="Remove letter">'+bank[s.bi].ch+'</button>';
@@ -400,7 +415,7 @@ function builder(o,gaps){
     var full=slots.every(function(s){return s.fixed||s.bi>=0});
     if(!full)return draw();
     var built=slots.map(function(s){return s.fixed?s.ch:bank[s.bi].ch}).join("");
-    if(built===word){done=true;draw();var first=!wrong;finish(word,first);feedback(true,word,first?"Correct on the first try!":"Correct!");}
+    if(built===word){done=true;draw();var first=!wrong;finish(word,first,true);feedback(true,word,first?"Correct on the first try!":"Correct!");}
     else{wrong=true;draw();var sl=document.getElementById("slots");sl.classList.add("shake");
       var fb=document.getElementById("fb");fb.innerHTML='<div class="fb info">Not quite. Check the order and try again.</div>';
       setTimeout(function(){sl.classList.remove("shake");clear()},650);}
@@ -416,7 +431,7 @@ function thenthan(t){
    '<p class="sentence">'+CUR.hint+'</p>';
   st.querySelectorAll("[data-c]").forEach(function(b){b.onclick=function(){
     if(b.dataset.c===t[1]){st.querySelectorAll("[data-c]").forEach(function(x){x.disabled=true});
-      finish(t[1],!tried);if(!tried)G.right;feedback(true,t[1],tried?"Correct!":"Correct on the first try!");}
+      finish(t[1],!tried,true);if(!tried)G.right;feedback(true,t[1],tried?"Correct!":"Correct on the first try!");}
     else{tried=true;b.disabled=true;document.getElementById("fb").innerHTML='<div class="fb info">Not that one. Try the other word.</div>';}}});
 }
 
@@ -465,10 +480,198 @@ function bossEnd(){
   document.getElementById("hm").onclick=home;
 }
 
+
+/* Sling Showdown */
+var SW=800,SH=400,GY=360,CS=40,X0=470,AX=120,AY=268,PR=14,MAXPULL=70,GRAV=0.36;
+var LV=[
+ [".M..M.",".W..W.","WWMWW."],
+ ["..M....",".WSW.M.",".WWW.S.","WWWWMSW"],
+ ["...M...","..WSW..","M.WSW.M","S.SSS.S","SWSWSWS"]];
+var MCOL=["#7a5cf0","#e8744f","#2aa876"];
+var S=null;
+function stopArena(){if(S){S.stop=true;if(S.raf)cancelAnimationFrame(S.raf);S=null}}
+function buildArena(){
+  app.innerHTML='<div class="row"><button class="btn ghost" id="quit">Home</button><span class="pill" id="shots"></span><span class="pill" id="lvl"></span><span class="pill" id="mleft"></span></div>'+
+   '<div class="arena"><canvas id="cv" aria-label="Sling game. Pull back the sling and release to launch."></canvas></div><p class="sentence" id="aimhint"></p><div id="qa"></div>';
+  var cv=document.getElementById("cv"),dpr=Math.min(2,window.devicePixelRatio||1);
+  cv.width=SW*dpr;cv.height=SH*dpr;
+  S={cv:cv,ctx:cv.getContext("2d"),dpr:dpr,objs:[],level:1,ammo:0,proj:null,drag:null,fx:[],defeated:0,cleared:0,last:0,acc:0,stop:false,clearing:false,complete:false,raf:0};
+  document.getElementById("quit").onclick=function(){stopArena();home()};
+  cv.addEventListener("pointerdown",pdown);cv.addEventListener("pointermove",pmove);
+  cv.addEventListener("pointerup",pup);cv.addEventListener("pointercancel",pup);
+  loadLevel();slingUI();S.raf=requestAnimationFrame(loop);
+}
+function loadLevel(){
+  var t=LV[(S.level-1)%LV.length];S.objs=[];
+  t.forEach(function(row,i){var r=t.length-1-i;row.split("").forEach(function(ch,c){
+    if(ch===".")return;
+    S.objs.push({t:ch,c:c,r:r,hp:ch==="S"?2:1,k:(S.level-1)%3,y:GY-(r+1)*CS});
+  })});
+  settle(false);
+}
+function monsLeft(){return S.objs.filter(function(o){return o.t==="M"}).length}
+function slingUI(){
+  if(!S)return;
+  var a=function(id,t){var e=document.getElementById(id);if(e)e.textContent=t};
+  a("shots","Shots: "+S.ammo);a("lvl","Level "+Math.min(S.level,3)+" of 3");a("mleft","Monsters: "+monsLeft());
+  a("aimhint",S.proj?"":S.ammo>0?"Ready! Touch the critter, pull back, and let go.":"No shots yet. Spell a word below to earn one.");
+}
+function pos(e){var r=S.cv.getBoundingClientRect();return{x:(e.clientX-r.left)*SW/r.width,y:(e.clientY-r.top)*SH/r.height}}
+function pdown(e){
+  if(!S||S.proj||S.ammo<=0)return;var p=pos(e);
+  if(Math.hypot(p.x-AX,p.y-AY)<70){S.drag={x:p.x,y:p.y};try{S.cv.setPointerCapture(e.pointerId)}catch(x){}pmove(e);e.preventDefault()}
+}
+function pmove(e){
+  if(!S||!S.drag)return;var p=pos(e),dx=p.x-AX,dy=p.y-AY,d=Math.hypot(dx,dy);
+  if(d>MAXPULL){dx*=MAXPULL/d;dy*=MAXPULL/d}
+  S.drag={x:AX+dx,y:AY+dy};
+}
+function pup(){
+  if(!S||!S.drag)return;var d=S.drag;S.drag=null;
+  if(Math.hypot(AX-d.x,AY-d.y)>=14)launch((AX-d.x)*.2,(AY-d.y)*.2);
+}
+function launch(vx,vy){
+  if(!S||S.proj||S.ammo<=0)return;
+  S.ammo--;S.proj={x:AX,y:AY,vx:vx,vy:vy,t:0,gr:0,trail:[]};slingUI();
+}
+function puff(x,y,col){for(var i=0;i<10;i++){var a=Math.random()*6.28,sp=1+Math.random()*3;S.fx.push({x:x,y:y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-1,life:24+Math.random()*10,c:col})}}
+function killObj(o,col){S.objs=S.objs.filter(function(x){return x!==o});puff(X0+o.c*CS+CS/2,o.y+CS/2,col)}
+function killMon(o){killObj(o,MCOL[o.k]);S.defeated++;slingUI();checkClear()}
+function settle(kill){
+  var cols={},again=false;
+  S.objs.forEach(function(o){(cols[o.c]=cols[o.c]||[]).push(o)});
+  Object.keys(cols).forEach(function(c){
+    cols[c].sort(function(a,b){return a.r-b.r}).forEach(function(o,i){
+      var fall=o.r-i;o.r=i;
+      if(kill&&fall>=2&&o.t==="M"){killMon(o);again=true}
+    });
+  });
+  if(again)settle(false);
+}
+function checkClear(){
+  if(monsLeft()>0||S.clearing)return;
+  S.clearing=true;S.cleared++;unlock("sling_win");
+  setTimeout(function(){
+    if(!S)return;S.clearing=false;S.level++;
+    if(S.level>3){S.complete=true;unlock("sling_all");toast("All 3 levels cleared!");slingUI();if(G&&G.kind==="sling"){var st=document.getElementById("stage");if(!st||G.i>=G.items.length)showDone();}}
+    else{toast("Level "+S.level+"! New monsters.");loadLevel();slingUI()}
+  },1100);
+}
+function tick(){
+  S.objs.forEach(function(o){var ty=GY-(o.r+1)*CS;o.y+=(ty-o.y)*.3;if(Math.abs(ty-o.y)<.5)o.y=ty});
+  S.fx.forEach(function(f){f.x+=f.vx;f.y+=f.vy;f.vy+=.2;f.life--});S.fx=S.fx.filter(function(f){return f.life>0});
+  var p=S.proj;if(!p)return;
+  p.t++;p.vy+=GRAV;p.x+=p.vx;p.y+=p.vy;
+  if(p.t%2===0){p.trail.push({x:p.x,y:p.y});if(p.trail.length>14)p.trail.shift()}
+  if(p.y+PR>GY){p.y=GY-PR;if(p.vy>0)p.vy=-p.vy*.35;p.vx*=.85;p.gr++}
+  var dirty=false;
+  S.objs.slice().forEach(function(o){
+    if(S.objs.indexOf(o)<0)return;
+    var x=X0+o.c*CS,y=GY-(o.r+1)*CS,cx=Math.max(x,Math.min(p.x,x+CS)),cy=Math.max(y,Math.min(p.y,y+CS));
+    var dx=p.x-cx,dy=p.y-cy,d2=dx*dx+dy*dy;if(d2>=PR*PR)return;
+    var sp=Math.hypot(p.vx,p.vy);
+    if(o.t==="M"){killMon(o);dirty=true;p.vx*=.85;p.vy*=.85;return}
+    if((o.t==="W"&&sp>=4)||(o.t==="S"&&sp>=6)){
+      o.hp--;
+      if(o.hp<=0){killObj(o,o.t==="W"?"#c98a4b":"#98a0b4");dirty=true;p.vx*=.7;p.vy*=.7;return}
+      puff(cx,cy,"#98a0b4");
+    }
+    var d=Math.sqrt(d2)||.001,nx=dx/d,ny=dy/d;
+    p.x+=nx*(PR-d);p.y+=ny*(PR-d);
+    var vn=p.vx*nx+p.vy*ny;if(vn<0){p.vx-=1.3*vn*nx;p.vy-=1.3*vn*ny}
+  });
+  if(dirty&&S)settle(true);
+  if(!S)return;
+  var sp2=Math.hypot(p.vx,p.vy);
+  if(p.x>SW+40||p.x<-40||p.t>480||(p.gr>25&&sp2<.8)){S.proj=null;slingUI()}
+}
+function loop(t){
+  if(!S||S.stop||!document.body.contains(S.cv))return;
+  var dt=Math.min(50,t-(S.last||t));S.last=t;S.acc+=dt;
+  while(S.acc>=16.67&&S){S.acc-=16.67;tick()}
+  if(S){draw();S.raf=requestAnimationFrame(loop)}
+}
+function zippy(c,x,y,r){
+  c.fillStyle="#19b5a5";c.beginPath();c.arc(x,y,r,0,6.283);c.fill();
+  c.fillStyle="#7fe3d6";c.beginPath();c.arc(x,y+r*.35,r*.6,0,3.14);c.fill();
+  c.strokeStyle="#0e7f74";c.lineWidth=2;c.lineCap="round";
+  for(var i=-1;i<=1;i++){c.beginPath();c.moveTo(x+i*4,y-r+1);c.lineTo(x+i*6,y-r-6);c.stroke()}
+  c.fillStyle="#fff";c.beginPath();c.arc(x-5,y-3,4.5,0,6.283);c.arc(x+5,y-3,4.5,0,6.283);c.fill();
+  c.fillStyle="#12303b";c.beginPath();c.arc(x-4,y-3,2,0,6.283);c.arc(x+6,y-3,2,0,6.283);c.fill();
+  c.beginPath();c.strokeStyle="#12303b";c.lineWidth=1.6;c.arc(x,y+3,5,.15,2.99);c.stroke();
+}
+function drawMon(c,o){
+  var x=X0+o.c*CS,y=o.y,col=MCOL[o.k];
+  c.fillStyle=col;c.beginPath();c.moveTo(x+4,y+CS-2);c.quadraticCurveTo(x-2,y+6,x+CS/2,y+3);c.quadraticCurveTo(x+CS+2,y+6,x+CS-4,y+CS-2);c.closePath();c.fill();
+  c.beginPath();c.moveTo(x+8,y+8);c.lineTo(x+6,y-1);c.lineTo(x+14,y+5);c.moveTo(x+CS-8,y+8);c.lineTo(x+CS-6,y-1);c.lineTo(x+CS-14,y+5);c.fill();
+  c.fillStyle="#fff";
+  if(o.k===1){c.beginPath();c.arc(x+CS/2,y+17,8,0,6.283);c.fill();c.fillStyle="#2a1530";c.beginPath();c.arc(x+CS/2+1,y+18,3.5,0,6.283);c.fill()}
+  else{c.beginPath();c.arc(x+13,y+17,6,0,6.283);c.arc(x+27,y+17,6,0,6.283);c.fill();c.fillStyle="#2a1530";c.beginPath();c.arc(x+14,y+18,2.6,0,6.283);c.arc(x+28,y+18,2.6,0,6.283);c.fill()}
+  c.strokeStyle="#2a1530";c.lineWidth=2;c.beginPath();c.moveTo(x+12,y+30);c.quadraticCurveTo(x+CS/2,y+36,x+CS-12,y+30);c.stroke();
+}
+function draw(){
+  var c=S.ctx;c.setTransform(S.dpr,0,0,S.dpr,0,0);
+  var sky=getComputedStyle(document.documentElement).getPropertyValue("--tile").trim()||"#e3ebfd";
+  c.fillStyle=sky;c.fillRect(0,0,SW,SH);
+  c.fillStyle="#7b5a3c";c.fillRect(0,GY,SW,SH-GY);c.fillStyle="#5a9b5f";c.fillRect(0,GY,SW,8);
+  S.objs.forEach(function(o){
+    if(o.t==="M")return drawMon(c,o);
+    var x=X0+o.c*CS,y=o.y;
+    c.fillStyle=o.t==="W"?"#c98a4b":"#98a0b4";c.fillRect(x+1,y+1,CS-2,CS-2);
+    c.strokeStyle=o.t==="W"?"#7a4f23":"#5d6578";c.lineWidth=2;c.strokeRect(x+1,y+1,CS-2,CS-2);
+    c.beginPath();if(o.t==="W"){c.moveTo(x+4,y+CS/2);c.lineTo(x+CS-4,y+CS/2)}else if(o.hp===1){c.moveTo(x+8,y+6);c.lineTo(x+18,y+20);c.lineTo(x+14,y+32)}c.stroke();
+  });
+  c.strokeStyle="#6b4423";c.lineCap="round";c.lineWidth=9;
+  c.beginPath();c.moveTo(AX,GY);c.lineTo(AX,AY+34);c.stroke();
+  c.lineWidth=7;c.beginPath();c.moveTo(AX,AY+34);c.lineTo(AX-14,AY+6);c.moveTo(AX,AY+34);c.lineTo(AX+14,AY+6);c.stroke();
+  for(var i=0;i<Math.min(S.ammo-(S.proj||S.drag?0:1),5);i++)zippy(c,AX-40-i*30,GY-PR,PR-2);
+  var bx=AX,by=AY,show=S.ammo>0&&!S.proj;
+  if(S.drag){bx=S.drag.x;by=S.drag.y}
+  if(show||S.drag){
+    c.strokeStyle="#3b2412";c.lineWidth=4;c.beginPath();c.moveTo(AX-14,AY+6);c.lineTo(bx,by);c.lineTo(AX+14,AY+6);c.stroke();
+    if(S.drag){
+      var vx=(AX-bx)*.2,vy=(AY-by)*.2,px=bx,py=by;
+      for(var k=1;k<=36;k++){vy+=GRAV;px+=vx;py+=vy;if(py>GY)break;if(k%3===0){c.fillStyle="rgba(255,255,255,"+(.9-k*.02)+")";c.strokeStyle="#12303b";c.lineWidth=1;c.beginPath();c.arc(px,py,3,0,6.283);c.fill();c.stroke()}}
+    }
+    zippy(c,bx,by,PR);
+  }
+  if(S.proj){
+    S.proj.trail.forEach(function(t,i){c.fillStyle="rgba(25,181,165,"+(i/S.proj.trail.length*.35)+")";c.beginPath();c.arc(t.x,t.y,4,0,6.283);c.fill()});
+    zippy(c,S.proj.x,S.proj.y,PR);
+  }
+  S.fx.forEach(function(f){c.globalAlpha=Math.max(0,f.life/30);c.fillStyle=f.c;c.beginPath();c.arc(f.x,f.y,4,0,6.283);c.fill()});c.globalAlpha=1;
+}
+function slingStep(){
+  if(!S)buildArena();
+  if(S.complete||G.i>=G.items.length)return showDone();
+  var it=G.items[G.i];
+  document.getElementById("qa").innerHTML='<section class="card prompt" id="stage"></section><div id="fb"></div>';
+  if(it.mg==="listen")listen(it.o);else builder(it.o,it.mg==="gaps");
+}
+function showDone(){
+  var qa=document.getElementById("qa");if(!qa||!S)return;
+  var msg=S.complete?"You cleared every level!":"All words done. "+(S.ammo>0?"You still have "+S.ammo+" shot"+(S.ammo>1?"s":"")+". Use them, then finish.":"You are out of shots.");
+  qa.innerHTML='<section class="card prompt"><div class="tag">Sling Showdown</div><h2>'+msg+'</h2><div class="row"><button class="btn" id="fin">Finish game</button></div></section>';
+  document.getElementById("fin").onclick=slingEnd;
+  slingUI();
+}
+function slingEnd(){
+  var st=S,lv=st?st.cleared:0,mons=st?st.defeated:0,all=st&&st.complete,n=G.items.length;
+  var uniq=G.missed.filter(function(w,i){return G.missed.indexOf(w)===i});
+  stopArena();
+  app.innerHTML='<section class="card prompt"><div class="tag">Sling Showdown results</div><div class="score">'+mons+' monsters</div>'+
+   '<h2>'+(all?"Champion! All 3 levels cleared.":lv>0?"Nice shooting! "+lv+" level"+(lv>1?"s":"")+" cleared.":"Good try. Spell more words to earn more shots.")+'</h2>'+
+   '<p class="sentence">Spelled right on the first try: <span class="hit">'+G.right+'</span> of '+n+'. Best streak: <b>'+(G.best||0)+'</b>.'+(uniq.length?'<br>Words to practice: <span class="miss">'+uniq.join(", ")+'</span>':'')+'</p>'+
+   '<div class="row"><button class="btn" id="again">Play again</button>'+(uniq.length?'<button class="btn ghost" id="fix">Practice missed words</button>':'')+'<button class="btn ghost" id="hm">Home</button></div></section>';
+  document.getElementById("again").onclick=function(){start("sling")};
+  var fx=document.getElementById("fix");if(fx)fx.onclick=function(){practiceMissed(uniq)};
+  document.getElementById("hm").onclick=home;
+}
+
 /* Study cards */
 function flash(o){
   app.innerHTML=header()+'<section class="card prompt"><div class="tag">Study card</div><div class="big">'+o.w+'</div><div class="syl">'+o.s+'</div>'+
-   '<p class="sentence">'+esc(o.x)+'</p><div class="row">'+speakBtn(o.w,"Say the word")+speakBtn(o.w.split("").join(", "),"Spell it out loud")+speakBtn(o.x,"Sentence")+'</div></section>'+
+   '<p class="sentence"><b>Meaning:</b> '+esc(o.d)+'</p><p class="sentence">'+esc(o.x)+'</p><div class="row">'+speakBtn(o.w,"Say the word")+speakBtn(o.w.split("").join(", "),"Spell it out loud")+speakBtn(o.x,"Sentence")+speakBtn(o.d,"Meaning")+'</div></section>'+
    '<div class="row"><button class="btn ghost" id="pv"'+(G.i===0?" disabled":"")+'>Back</button><button class="btn" id="nx">'+(G.i>=G.items.length-1?"Finish":"Next word")+'</button></div>';
   document.getElementById("quit").onclick=home;wireSpeak(app);speak(o.w);
   document.getElementById("pv").onclick=function(){G.i=Math.max(0,G.i-1);step()};
