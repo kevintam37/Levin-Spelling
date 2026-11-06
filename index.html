@@ -114,8 +114,62 @@ input.type{width:100%;font-family:var(--display);font-size:1.7rem;font-weight:60
 <main id="app"></main>
 
 <script>
-function W(w,s,x,d){return{w:w,s:s,x:x,d:d}}
+function W(w,s,x,d,alt){return{w:w,s:s,x:x,d:d,alt:alt?[alt]:[]}}
 var TESTS=[
+ {id:"2026-bee-5",title:"5th Grade Bee Study Words",bee:true,sort:7,
+  note:"These are the 50 challenging fifth-grade words from the 2026-2027 Scripps National Spelling Bee study list. Capital letters do not matter when you type. For piñata you can type pinata or piñata. For fertilizer, fertiliser (British spelling) also counts.",
+  words:[
+   W("Halloween","Hal-low-een","We wore costumes and went trick-or-treating on Halloween.","A holiday on October 31 when children dress up in costumes."),
+   W("compliment","com-pli-ment","She gave me a compliment on my drawing.","A kind remark that praises someone."),
+   W("compromise","com-pro-mise","We reached a compromise and split the last slice of pizza.","An agreement in which each side gives up a little of what it wants."),
+   W("incident","in-ci-dent","The teacher wrote a report about the incident on the playground.","Something that happens, especially something unusual."),
+   W("Japanese","Jap-a-nese","She is learning to speak Japanese.","Having to do with Japan, its people, or its language."),
+   W("investment","in-vest-ment","Buying a good pair of shoes was a smart investment.","Money, time, or effort put into something to get a benefit later."),
+   W("bifocals","bi-fo-cals","Grandpa wears bifocals to read and to see far away.","Eyeglasses with lenses that help you see both close up and far away."),
+   W("cutlery","cut-ler-y","Please set the cutlery next to each plate.","Knives, forks, and spoons used for eating."),
+   W("chisel","chis-el","The sculptor used a chisel to carve the stone.","A tool with a sharp, flat edge used to cut or shape wood, stone, or metal."),
+   W("fundraiser","fund-rais-er","Our school held a fundraiser to buy new library books.","An event held to collect money for a cause."),
+   W("geologist","ge-ol-o-gist","The geologist studied the rocks in the canyon.","A scientist who studies the Earth, including its rocks and soil."),
+   W("bellowed","bel-lowed","The coach bellowed across the field.","Shouted in a loud, deep voice."),
+   W("organism","or-gan-ism","A tiny organism lives in a drop of pond water.","A living thing, such as a plant, an animal, or a germ."),
+   W("quail","quail","A quail and her chicks ran across the path.","A small, plump bird that nests on the ground."),
+   W("atmosphere","at-mos-phere","Earth's atmosphere is made of layers of gases.","The layer of gases that surrounds a planet."),
+   W("disappointment","dis-ap-point-ment","She tried to hide her disappointment when the trip was canceled.","The sad feeling you get when something you hoped for does not happen."),
+   W("truant","tru-ant","The truant student skipped school to go fishing.","A student who stays away from school without permission."),
+   W("pamphlet","pam-phlet","The museum gave us a pamphlet about dinosaurs.","A thin booklet of information with a paper cover."),
+   W("helium","he-li-um","The balloon floated up because it was filled with helium.","A very light gas that is lighter than air."),
+   W("suggested","sug-gest-ed","Mom suggested that we take a walk after dinner.","Offered an idea for someone to think about."),
+   W("chimpanzees","chim-pan-zees","The chimpanzees swung from branch to branch.","Smart apes with dark fur that live in Africa."),
+   W("desperate","des-per-ate","The desperate hikers searched everywhere for water.","Feeling a great need and having little hope."),
+   W("annoyance","an-noy-ance","He sighed with annoyance when the alarm rang again.","A feeling of being bothered or a little angry."),
+   W("interruption","in-ter-rup-tion","The loud phone call was an interruption.","A break in something that is going on."),
+   W("concentrate","con-cen-trate","I need quiet to concentrate on my homework.","To keep all of your attention on one thing."),
+   W("piñata","pi-ña-ta","The kids took turns hitting the piñata at the party.","A decorated container filled with candy that is hit until it breaks open.","pinata"),
+   W("territory","ter-ri-to-ry","The wolves defended their territory.","An area of land that belongs to or is controlled by someone."),
+   W("stragglers","strag-glers","The stragglers walked slowly behind the rest of the group.","People who fall behind or move more slowly than the others."),
+   W("albino","al-bi-no","The albino rabbit had white fur and pink eyes.","A person or animal born with very little color in the skin, hair, and eyes."),
+   W("ridiculous","ri-dic-u-lous","The clown wore a ridiculous hat.","Very silly or hard to believe."),
+   W("monorail","mon-o-rail","The monorail glided above the park on a single track.","A train that runs on just one rail."),
+   W("exploratory","ex-plor-a-to-ry","The doctor ordered an exploratory test to learn more.","Done in order to find out more about something."),
+   W("indigo","in-di-go","The sky turned a deep indigo after sunset.","A dark blue-purple color."),
+   W("bratwurst","brat-wurst","We grilled bratwurst for dinner.","A kind of German sausage."),
+   W("alphabetical","al-pha-bet-i-cal","The names on the list are in alphabetical order.","Arranged in the order of the letters of the alphabet."),
+   W("integrity","in-teg-ri-ty","She showed integrity by telling the truth.","Being honest and doing what is right."),
+   W("Oregon","Or-e-gon","Oregon is a state on the West Coast.","A state in the northwestern United States."),
+   W("rebuttal","re-but-tal","He gave a rebuttal to the other team's argument.","An answer that argues against what someone else has said."),
+   W("prejudice","prej-u-dice","Prejudice means judging people unfairly before you know them.","An unfair opinion formed without knowing the facts."),
+   W("solidarity","sol-i-dar-i-ty","The class stood in solidarity with their friend.","Unity among people who share goals and support each other."),
+   W("calico","cal-i-co","The calico cat has patches of white, black, and orange.","Having spots or patches of several colors, like some cats and cloth."),
+   W("sputnik","sput-nik","Sputnik was the first satellite sent into space.","The first human-made satellite, launched into space in 1957."),
+   W("cartridge","car-tridge","She put a new ink cartridge in the printer.","A small case that holds something, such as ink, and fits into a machine."),
+   W("segregation","seg-re-ga-tion","The class studied the history of segregation in America.","Keeping people or groups apart, often unfairly."),
+   W("tortillas","tor-til-las","We wrapped beans and cheese in warm tortillas.","Thin, flat, round breads made from corn or wheat flour."),
+   W("civilian","ci-vil-ian","A civilian is not a member of the military.","A person who is not in the military or the police."),
+   W("fertilizer","fer-ti-liz-er","The farmer spread fertilizer on the field.","Something added to soil to help plants grow.","fertiliser"),
+   W("apprentice","ap-pren-tice","The apprentice learned carpentry from an expert.","A person who learns a job by working with a skilled worker."),
+   W("synthetic","syn-thet-ic","Nylon is a synthetic fabric.","Made by people instead of found in nature."),
+   W("Caesar","Cae-sar","Julius Caesar was a powerful leader of ancient Rome.","The title of the emperors of Rome. Julius Caesar was a famous Roman leader.")],
+  items:[]},
  {id:"2026-10-w4",week:4,month:"October",year:2026,sort:6,pair:["through","threw"],
   hint:"<b>through</b> means going in one side and out the other. <b>threw</b> is the past tense of throw.",
   words:[
@@ -179,7 +233,9 @@ var TESTS=[
 ];
 var WORDS=[],TT=[],CUR=null;
 function cap(t){return t.charAt(0).toUpperCase()+t.slice(1)}
-function label(t){return "Week "+t.week+" of "+t.month+" "+t.year}
+function label(t){return t.title||("Week "+t.week+" of "+t.month+" "+t.year)}
+function norm(s){return String(s).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase()}
+function same(v,o){var n=norm(v);return n===norm(o.w)||(o.alt||[]).some(function(a){return n===norm(a)})}
 var MODES={
  boss:{name:"Monster Battle",desc:"Spell words to defeat the monster. Lose 3 hearts and it wins."},
  arcade:{name:"Arcade Games",desc:"Spell words to earn plays, then pick a quick game: balloons, stars, hoops, matching, coins, gems or eggs."},
@@ -273,7 +329,7 @@ function hub(){
   stopArena();G=null;CUR=null;
   app.innerHTML='<div><div class="tag">Spelling tests</div><h1>Choose a test</h1></div>'+
    '<div class="tests">'+TESTS.map(function(t,i){var m=t.words.filter(function(o){return(prog[o.w]||0)>=3}).length;
-     return '<button class="mode test" data-t="'+i+'"><strong>'+label(t)+'</strong><span>Sort #'+t.sort+' &middot; '+t.words.length+' words &middot; '+m+' mastered</span></button>'}).join("")+'</div>'+
+     return '<button class="mode test" data-t="'+i+'"><strong>'+label(t)+'</strong><span>'+(t.bee?'School spelling bee':'Sort #'+t.sort)+' &middot; '+t.words.length+' words &middot; '+m+' mastered</span></button>'}).join("")+'</div>'+
    '<div class="row"><button class="btn" id="book">Sticker book ('+earned()+' of '+badgeDefs().length+')</button></div>';
   document.getElementById("book").onclick=book;
   app.querySelectorAll("[data-t]").forEach(function(b){b.onclick=function(){pick(TESTS[+b.dataset.t])}});
@@ -287,8 +343,8 @@ function book(){
   document.getElementById("all").onclick=function(){CUR?home():hub()};
 }
 function pick(t){
-  CUR=t;WORDS=t.words;TT=t.items;
-  MODES.thenthan.name=cap(t.pair[0])+" or "+cap(t.pair[1]);
+  CUR=t;WORDS=t.words;TT=t.items||[];
+  if(t.pair)MODES.thenthan.name=cap(t.pair[0])+" or "+cap(t.pair[1]);
   home();
 }
 function home(){
@@ -297,12 +353,12 @@ function home(){
   var mastered=WORDS.filter(function(o){return(prog[o.w]||0)>=3}).length;
   app.innerHTML=
    '<div class="row"><button class="btn ghost" id="all">All tests</button></div>'+
-   '<div class="top"><div><div class="tag">Sort #'+CUR.sort+' spelling list</div><h1>'+label(CUR)+'</h1></div>'+
+   '<div class="top"><div><div class="tag">'+(CUR.bee?'School spelling bee list':'Sort #'+CUR.sort+' spelling list')+'</div><h1>'+label(CUR)+'</h1></div>'+
    '<div class="card" style="padding:10px 16px"><b>'+mastered+' of '+WORDS.length+'</b> words mastered</div></div>'+
-   '<div class="modes">'+Object.keys(MODES).map(function(k){return '<button class="mode'+(k==="testday"?" alt":"")+'" data-m="'+k+'"><strong>'+MODES[k].name+'</strong><span>'+MODES[k].desc+'</span></button>'}).join("")+'</div>'+
+   '<div class="modes">'+Object.keys(MODES).filter(function(k){return k!=="thenthan"||CUR.pair}).map(function(k){return '<button class="mode'+(k==="testday"?" alt":"")+'" data-m="'+k+'"><strong>'+MODES[k].name+'</strong><span>'+MODES[k].desc+'</span></button>'}).join("")+'</div>'+
    '<section class="card"><h2>Your words</h2><p class="sentence" style="margin:6px 0 12px">Get a word right on the first try to earn a star. Three stars means mastered. Tap a word to hear it.</p>'+
    '<div class="words">'+WORDS.map(function(o){return '<button class="w" data-say="'+o.w+'"><span style="min-width:0"><b>'+o.w+'</b><small>'+esc(o.d)+'</small></span>'+stars(prog[o.w]||0)+'</button>'}).join("")+'</div>'+
-   '<p class="sentence" style="margin:14px 0 0">The last two, '+CUR.pair[0]+' and '+CUR.pair[1]+', are the non-negotiables.</p></section>';
+   (CUR.pair?'<p class="sentence" style="margin:14px 0 0">The last two, '+CUR.pair[0]+' and '+CUR.pair[1]+', are the non-negotiables.</p>':(CUR.note?'<p class="sentence" style="margin:14px 0 0">'+esc(CUR.note)+'</p>':''))+'</section>';
   document.getElementById("all").onclick=hub;
   app.querySelectorAll("[data-m]").forEach(function(b){b.onclick=function(){start(b.dataset.m)}});
   app.querySelectorAll("[data-say]").forEach(function(b){b.onclick=function(){speak(b.dataset.say)}});
@@ -392,9 +448,9 @@ function listen(o){
   var inp=document.getElementById("ans"),msg=document.getElementById("msg");inp.focus();
   function check(){
     var v=inp.value.trim().toLowerCase();if(!v)return;
-    if(v===o.w){inp.disabled=true;var first=tries===0&&!hinted;finish(o.w,first,true);feedback(true,o.w,first?"Correct on the first try!":"Correct!");}
+    if(same(v,o)){inp.disabled=true;var first=tries===0&&!hinted;finish(o.w,first,true);feedback(true,o.w,first?"Correct on the first try!":"Correct!");}
     else{tries++;if(tries>=2){inp.disabled=true;finish(o.w,false,false);
-      var d="";for(var i=0;i<o.w.length;i++){d+=(v[i]===o.w[i])?o.w[i]:'<u>'+o.w[i]+'</u>'}
+      var d="";for(var i=0;i<o.w.length;i++){d+=(v[i]!==undefined&&norm(v[i])===norm(o.w[i]))?o.w[i]:'<u>'+o.w[i]+'</u>'}
       feedback(false,o.w,"The word is");document.querySelector("#fb .word").innerHTML=d;}
       else{msg.textContent="Not quite. Listen again and try one more time.";inp.classList.add("shake");setTimeout(function(){inp.classList.remove("shake")},400);inp.select();}}
   }
@@ -474,7 +530,7 @@ function testday(o){
 function testEnd(){
   var n=G.items.length,r=0,rows="",miss=[];
   G.items.forEach(function(it,i){
-    var a=G.answers[i]||"",ok=a===it.o.w;if(ok)r++;else miss.push(it.o.w);
+    var a=G.answers[i]||"",ok=same(a,it.o);if(ok)r++;else miss.push(it.o.w);
     bump(it.o.w,ok);
     rows+='<div class="rep"><b>'+it.o.w+'</b><span class="'+(ok?"hit":"miss")+'">'+(ok?"Correct":"You wrote: "+esc(a||"(blank)"))+'</span></div>';
   });
